@@ -3,7 +3,6 @@ package com.example.service;
 import com.example.entity.Account;
 import com.example.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -49,5 +48,10 @@ private final AccountRepository accountRepository;
         }
     
         return ResponseEntity.status(200).body(storedAccount);
+    }
+
+    //helper fuction to see if user exist by looking for account id. Used in the message service class
+    public boolean userExists(Integer accountId) {
+        return accountRepository.existsById(accountId);
     }
 }

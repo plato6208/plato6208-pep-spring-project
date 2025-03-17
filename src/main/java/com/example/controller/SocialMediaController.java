@@ -2,6 +2,8 @@ package com.example.controller;
 
 import com.example.entity.Account;
 import com.example.service.AccountService;
+import com.example.entity.Message;
+import com.example.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +19,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/")
 public class SocialMediaController {
     private final AccountService accountService;
-
+    private final MessageService messageService;
     @Autowired
-    public SocialMediaController(AccountService accountService) {
+    public SocialMediaController(AccountService accountService, MessageService messageService) {
         this.accountService = accountService;
+        this.messageService = messageService;
     }
 
     @PostMapping("/register")
@@ -30,5 +33,10 @@ public class SocialMediaController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody Account account) {
         return accountService.loginAccount(account);
+    }
+
+    @PostMapping("/messages")
+    public ResponseEntity<?> CreateNewMessage(@RequestBody Message message) {
+        return messageService.CreateMessage(message);
     }
 }
