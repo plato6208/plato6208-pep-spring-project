@@ -27,4 +27,8 @@ public class SocialMediaController {
     public ResponseEntity<?> registerUser(@RequestBody Account account) {
         return accountService.registerAccount(account);
     }
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody Account account) {
+        return accountService.loginAccount(account);
+    }
 }

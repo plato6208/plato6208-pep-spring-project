@@ -35,4 +35,19 @@ private final AccountRepository accountRepository;
         
         return ResponseEntity.status(200).body(savedAccount);
     }
+
+    public ResponseEntity<?> loginAccount(Account account) {
+        Optional<Account> existingAccount = accountRepository.findByUsername(account.getUsername());
+
+        if (existingAccount.isEmpty()) {
+            return ResponseEntity.status(401).build();
+        }
+    
+        Account storedAccount = existingAccount.get();
+        if (!storedAccount.getPassword().equals(account.getPassword())) {
+            return ResponseEntity.status(401).build();
+        }
+    
+        return ResponseEntity.status(200).body(storedAccount);
+    }
 }
