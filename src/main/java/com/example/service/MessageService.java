@@ -6,6 +6,7 @@ import com.example.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import java.util.*;
 
 @Service
 public class MessageService {
@@ -34,5 +35,20 @@ public class MessageService {
         }
         Message savedMessage = messageRepository.save(message);
         return ResponseEntity.status(200).body(savedMessage);
+    }
+
+    public ResponseEntity<?> getAllMessages() {
+        List<Message> messages = messageRepository.findAll();
+        return ResponseEntity.status(200).body(messages);
+    }
+
+    public ResponseEntity<?> getMessageById(Integer messageId) {
+        Optional<Message> message = messageRepository.findById(messageId);
+        
+        if (message.isPresent()) {
+            return ResponseEntity.status(200).body(message.get());
+        } else {
+            return ResponseEntity.status(200).build();
+        }
     }
 }
