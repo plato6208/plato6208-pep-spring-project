@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.*;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
@@ -50,5 +51,20 @@ public class SocialMediaController {
         return messageService.getMessageById(messageId);
     }
 
+    @DeleteMapping("messages/{messageId}") 
+    public ResponseEntity<?> deleteMessageById(@PathVariable Integer messageId) {
+        return messageService.deleteMessageById(messageId);
+    }
+
+    @PatchMapping("messages/{messageId}")
+    public ResponseEntity<?> updateMessageText(@PathVariable Integer messageId, @RequestBody Map<String, String> updatedFields) {
+        String messageText = updatedFields.get("messageText");
+
+        return messageService.updateMessageById(messageId, messageText);
+    }
     
+    @GetMapping("/accounts/{accountId}/messages")
+    public ResponseEntity<?> getMessagesByAccountId(@PathVariable Integer accountId) {
+        return messageService.getMessagesByAccountId(accountId);
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.service;
 
 import com.example.entity.Message;
-import com.example.entity.Account;
+
 import com.example.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,4 +51,37 @@ public class MessageService {
             return ResponseEntity.status(200).build();
         }
     }
+
+    public ResponseEntity<?> deleteMessageById(Integer messageId) {
+        int rows = messageRepository.deleteMessageById(messageId);
+        if(rows > 0) {
+            return ResponseEntity.status(200).body(rows);
+        } else {
+            return ResponseEntity.status(200).build();
+        }
+    }
+
+    public ResponseEntity<?> updateMessageById(Integer messageId, String messageText ) {
+        Optional<Message> messOptional = messageRepository.findById(messageId);
+        if(messOptional.isEmpty()) {
+            return ResponseEntity.status(400).build();
+        }
+        if(messageText.isEmpty() || messageText.length() >255) {
+            return ResponseEntity.status(400).build();
+        }
+        Message message = messOptional.get();
+        message.setMessageText(messageText);
+        messageRepository.save(message);
+        return ResponseEntity.status(200).body(1);
+    }
+
+    public ResponseEntity<?> getMessagesByAccountId(Integer accountId) {
+        List<Message> messages = messageRepository.findByPostedBy(accountId);
+        if (messages.isEmpty()) {
+            return ResponseEntity.status(200).body(messages);
+        } else {
+            return ResponseEntity.status(200).body(messages);
+        }
+    }
+
 }
