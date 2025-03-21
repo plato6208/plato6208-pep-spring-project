@@ -44,7 +44,7 @@ public class MessageService {
 
     public ResponseEntity<?> getMessageById(Integer messageId) {
         Optional<Message> message = messageRepository.findById(messageId);
-        
+        //check to see if message is present. if it is, then return message else just status 200
         if (message.isPresent()) {
             return ResponseEntity.status(200).body(message.get());
         } else {
@@ -54,6 +54,7 @@ public class MessageService {
 
     public ResponseEntity<?> deleteMessageById(Integer messageId) {
         int rows = messageRepository.deleteMessageById(messageId);
+        //check to see if message was deleted. if so rthen return row deleted else just status 200
         if(rows > 0) {
             return ResponseEntity.status(200).body(rows);
         } else {
@@ -63,12 +64,14 @@ public class MessageService {
 
     public ResponseEntity<?> updateMessageById(Integer messageId, String messageText ) {
         Optional<Message> messOptional = messageRepository.findById(messageId);
+        //validate whether message cvan be updated if not then status 400
         if(messOptional.isEmpty()) {
             return ResponseEntity.status(400).build();
         }
         if(messageText.isEmpty() || messageText.length() >255) {
             return ResponseEntity.status(400).build();
         }
+        //updates message and returns status 200 along with 1 to signify one row has been updated
         Message message = messOptional.get();
         message.setMessageText(messageText);
         messageRepository.save(message);
@@ -76,12 +79,9 @@ public class MessageService {
     }
 
     public ResponseEntity<?> getMessagesByAccountId(Integer accountId) {
+        //returns a list of messages from a specified accountid 
         List<Message> messages = messageRepository.findByPostedBy(accountId);
-        if (messages.isEmpty()) {
-            return ResponseEntity.status(200).body(messages);
-        } else {
-            return ResponseEntity.status(200).body(messages);
-        }
+        return ResponseEntity.status(200).body(messages);
     }
 
 }

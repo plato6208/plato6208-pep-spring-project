@@ -17,36 +17,35 @@ private final AccountRepository accountRepository;
     }
 
     public ResponseEntity<?> registerAccount(Account account) {
+        //checks to see if user is a valid entry 
         if (account.getUsername() == null || account.getUsername().isEmpty()) {
             return ResponseEntity.status(400).build();
         }
-
         if (account.getPassword() == null || account.getPassword().length() < 4) {
             return ResponseEntity.status(400).build();
         }
 
         Optional<Account> existingAccount = accountRepository.findByUsername(account.getUsername());
+        //checks to see if account exists
         if (existingAccount.isPresent()) {
             return ResponseEntity.status(409).build();
         }
 
         Account savedAccount = accountRepository.save(account);
-        
         return ResponseEntity.status(200).body(savedAccount);
     }
 
     public ResponseEntity<?> loginAccount(Account account) {
         Optional<Account> existingAccount = accountRepository.findByUsername(account.getUsername());
-
+        //chcecks to see if account is a valid entry 
         if (existingAccount.isEmpty()) {
             return ResponseEntity.status(401).build();
         }
-    
         Account storedAccount = existingAccount.get();
         if (!storedAccount.getPassword().equals(account.getPassword())) {
             return ResponseEntity.status(401).build();
         }
-    
+  
         return ResponseEntity.status(200).body(storedAccount);
     }
 
